@@ -6,7 +6,7 @@ from pathlib import Path
   
 
 def get_data(filename):
-    """Importa un archivo .csv y lo guarda en un dataframe
+    """Metodo que importa un archivo .csv y lo guarda en un dataframe
 
     Args:
         filename (string): Nombre del archivo a cargar
@@ -26,6 +26,14 @@ def get_data(filename):
 
 
 def drop_duplicate(datos):
+    """Metodo que borra los duplicados del dataframe
+
+    Args:
+        datos (dataframe): Ingresa el data frame
+
+    Returns:
+        dataframe: El dataframe sin los datos duplicados
+    """
     df=datos.drop_duplicates()
     df.reset_index(inplace=True)#Sobreescribe en el espacio de memoria
     df.drop(columns='index',inplace=True)
@@ -36,6 +44,14 @@ def drop_duplicate(datos):
 
 
 def change_nulls(df):
+    """Metodo que cambia los datos nulos cuando las columnas son de tipo de datos object
+
+    Args:
+        df (dataframe): Ingresa el dataframe a analizar o quitar duplicados
+
+    Returns:
+        dataframe: dataframe sin nulos
+    """
     for col in df.columns:
         print('\n') 
         print('-------  dtype ------')
@@ -50,6 +66,14 @@ def change_nulls(df):
     return df 
 
 def change_type(df):
+    """Metodo que cambia el tipo de dato cuando es una fecha
+
+    Args:
+        df (dataframe): data frame al cual se le va a trasnformar el tipo de dato de fecha
+
+    Returns:
+        dataframe: dataframe con el tipo de dato fecha
+    """
     for col in df.columns:
         if 'FECHA'.lower() in col.lower():
             df[col] = pd.to_datetime(df[col],errors='coerce')
@@ -58,12 +82,19 @@ def change_type(df):
     
 
 def showAmountNAPerColumn(columns):
+
   for i in columns.columns:
     print(f'Porcentaje de datos NAN en "{i}" es: {(columns[i].isnull().sum()/columns.shape[0])*100}%')
 
 
       
 def generate_file(df,file_name):
+    """Metodo para guardar el archivo
+
+    Args:
+        df (dataframe): dataframe que voy a guardar en el archivo
+        file_name (string): nombre del archivo que se cargo inicialmente
+    """
     #data_dir="raw"
     root_dir=Path('.').resolve().parent 
     out_name='reporte_limpieza_' + file_name
