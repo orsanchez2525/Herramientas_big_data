@@ -1,10 +1,3 @@
-#pseudo codigo
-#Main()
-  #datos=get_data(filename)
-  #reporte=generate_report(datos)
-  #save_data(reporte)
-
-
 
 # importar librerias internas del sistema
 import os
@@ -13,6 +6,14 @@ from pathlib import Path
   
 
 def get_data(filename):
+    """Importa un archivo .csv y lo guarda en un dataframe
+
+    Args:
+        filename (string): Nombre del archivo a cargar
+
+    Returns:
+        dataframe: El dataframe donde se cargo el archivo
+    """
     data_dir="raw"
     root_dir=Path('.').resolve().parent
     file_path=os.path.join(root_dir,"data",data_dir,filename)
