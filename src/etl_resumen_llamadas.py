@@ -98,18 +98,21 @@ def generate_file(df,file_name):
     out_name='reporte_limpieza_' + file_name
     df.to_csv(f'gs://orsanchez_llamadas_123/data/processed/{out_name}')
 
-def main ():
-    filename="llamadas123_julio_2022.csv"
-    datos=get_data(filename)
-    datos_sin_duplicados=drop_duplicate(datos)
-    datos_sin_nulos=change_nulls(datos_sin_duplicados)
-    #print(datos_sin_nulos)
-    #print (datos_sin_nulos['UNIDAD'].value_counts(dropna=False))
-    showAmountNAPerColumn(datos)
-    change_type(datos_sin_nulos)
-    print(datos_sin_nulos.dtypes)
-    generate_file(datos_sin_nulos,filename)
 
+def main ():
+    filenames = ["llamadas123_julio_2022.csv","llamadas123_agosto_2022.csv","datos_llamadas123_mayo_2022.csv"]
+    dataframes = []
+    for filename in filenames:
+        datos = get_data(filename)
+        showAmountNAPerColumn(datos)
+        datos = drop_duplicate(datos)
+        datos = change_nulls(datos)
+        datos = change_type(datos)
+        dataframes.append(datos)
+    print('dataframes', dataframes)
+    print('Tamaño:', len(dataframes))
+    fullData = pd.concat(dataframes)
+    generate_file(fullData, "datos_consolidados.csv")
 
 if __name__=='__main__':
     main()
