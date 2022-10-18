@@ -14,10 +14,10 @@ def get_data(filename):
     Returns:
         dataframe: El dataframe donde se cargo el archivo
     """
-    data_dir="raw"
-    root_dir=Path('.').resolve().parent
-    file_path=os.path.join(root_dir,"data",data_dir,filename)
-    datos=pd.read_csv(file_path,sep=";",encoding="latin-1")
+   # data_dir="raw"
+    #root_dir=Path('.').resolve().parent
+    #file_path=os.path.join(root_dir,"data",data_dir,filename)
+    datos=pd.read_csv("gs://orsanchez_llamadas_123/data/raw/llamadas123_julio_2022.csv",sep=";",encoding="latin-1")
     print('get_date')
     print(datos.shape[0],datos.shape[1])
     print(filename, type(filename))
@@ -95,11 +95,8 @@ def generate_file(df,file_name):
         df (dataframe): dataframe que voy a guardar en el archivo
         file_name (string): nombre del archivo que se cargo inicialmente
     """
-    #data_dir="raw"
-    root_dir=Path('.').resolve().parent 
     out_name='reporte_limpieza_' + file_name
-    out_path=os.path.join(root_dir,"data","processed",out_name)
-    df.to_csv(out_path)
+    df.to_csv(f'gs://orsanchez_llamadas_123/data/processed/{out_name}')
 
 def main ():
     filename="llamadas123_julio_2022.csv"
