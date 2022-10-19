@@ -17,10 +17,10 @@ def get_data(filename):
    # data_dir="raw"
     #root_dir=Path('.').resolve().parent
     #file_path=os.path.join(root_dir,"data",data_dir,filename)
-    datos=pd.read_csv("gs://orsanchez_llamadas_123/data/raw/llamadas123_julio_2022.csv",sep=";",encoding="latin-1")
+    datos=pd.read_csv(f"gs://orsanchez_llamadas_123/data/raw/{filename}",sep=";",encoding="latin-1")
     print('get_date')
     print(datos.shape[0],datos.shape[1])
-    print(filename, type(filename))
+    #print(filename, type(filename))
     return datos
    
 
@@ -100,7 +100,7 @@ def generate_file(df,file_name):
 
 
 def main ():
-    filenames = ["llamadas123_julio_2022.csv","llamadas123_agosto_2022.csv","datos_llamadas123_mayo_2022.csv"]
+    filenames = ["llamadas123_agosto_2022.csv","llamadas123_julio_2022.csv","llamadas123_junio_2022.csv"]
     dataframes = []
     for filename in filenames:
         datos = get_data(filename)
@@ -112,7 +112,7 @@ def main ():
     print('dataframes', dataframes)
     print('Tamaño:', len(dataframes))
     fullData = pd.concat(dataframes)
-    generate_file(fullData, "datos_consolidados.csv")
+    generate_file(fullData, "datos_consolidados_v2.csv")
 
 if __name__=='__main__':
     main()
