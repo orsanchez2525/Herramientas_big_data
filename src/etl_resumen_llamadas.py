@@ -22,9 +22,18 @@ def get_data(filename):
     print(datos.shape[0],datos.shape[1])
     #print(filename, type(filename))
     return datos
+
+
+def normalizeNamesColumns(df):
+    if df.shape[1] == 10:
+        df.columns = ['NUMERO_INCIDENTE', 'FECHA_INICIO_DESPLAZAMIENTO_MOVIL', 'CODIGO_LOCALIDAD', 'LOCALIDAD',	'EDAD',	'UNIDAD', 'GENERO',	'RED','TIPO_INCIDENTE',	'PRIORIDAD']
+    else: 
+        df.columns = ['NUMERO_INCIDENTE', 'FECHA_INICIO_DESPLAZAMIENTO_MOVIL', 'CODIGO_LOCALIDAD', 'LOCALIDAD',	'EDAD',	'UNIDAD', 'GENERO',	'RED','TIPO_INCIDENTE',	'PRIORIDAD', 'RECEPCIÓN']
+    return df
+
+
+
    
-
-
 def drop_duplicate(datos):
     """Metodo que borra los duplicados del dataframe
 
@@ -100,19 +109,20 @@ def generate_file(df,file_name):
 
 
 def main ():
-    filenames = ["llamadas123_agosto_2022.csv","llamadas123_julio_2022.csv","llamadas123_junio_2022.csv"]
+    filenames = ["20.llamadas123_agosto_2022.csv","1.llamadas_123_enero_2021.csv"]
     dataframes = []
     for filename in filenames:
         datos = get_data(filename)
         showAmountNAPerColumn(datos)
+        datos = normalizeNamesColumns(datos)
         datos = drop_duplicate(datos)
         datos = change_nulls(datos)
         datos = change_type(datos)
         dataframes.append(datos)
     print('dataframes', dataframes)
-    print('Tamaño:', len(dataframes))
     fullData = pd.concat(dataframes)
-    generate_file(fullData, "datos_consolidados_v2.csv")
+    print('Tamaño:', len(dataframes))
+    generate_file(fullData, "v4_datos_consolidados.csv")
 
 if __name__=='__main__':
     main()
