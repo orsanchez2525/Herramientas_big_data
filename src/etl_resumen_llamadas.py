@@ -55,10 +55,9 @@ def drop_duplicate(datos):
     df=datos.drop_duplicates()
     df.reset_index(inplace=True)#Sobreescribe en el espacio de memoria
     df.drop(columns='index',inplace=True)
-    #df.drop(columns='index',inplace=True,drop=True)
     print('forma sin duplicados',df.shape)
     return df
-    #df.info()
+
 
 
 def change_nulls(df):
@@ -71,16 +70,8 @@ def change_nulls(df):
         dataframe: dataframe sin nulos
     """
     for col in df.columns:
-        print('\n') 
-        print('-------  dtype ------')
-        print(df[col].dtype)
-        print('-------  ----- ------') 
         if df[col].dtype == 'object':
             df[col].fillna('SIN_DATO',inplace=True)
-            #print("object")
-            #print(type(df[col])) 
-        else:
-             print("otro")
     return df 
 
 def change_type(df):
@@ -114,7 +105,73 @@ def generate_file(df,file_name):
         file_name (string): nombre del archivo que se cargo inicialmente
     """
     out_name='reporte_limpieza_' + file_name
-    df.to_csv(f'gs://orsanchez_llamadas_123/data/processed/{out_name}',encoding="latin-1",index = False)
+    df.to_csv(f'gs://orsanchez_llamadas_123/data/processed/{out_name}', index = False)
+
+def cleanData(fullData):
+    fullData['UNIDAD'] = np.where(fullData['UNIDAD'] == 'A¤os', 'AÑOS', fullData['UNIDAD'])
+    fullData['UNIDAD'] = np.where(fullData['UNIDAD'] == 'AÂ¤os', 'AÑOS', fullData['UNIDAD'])
+    fullData['PRIORIDAD'] = np.where(fullData['PRIORIDAD'] == 'CRITCA', 'CRITICA', fullData['PRIORIDAD'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Accidente de Aviaci¢n', 'Accidente de Aviación', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Acompa¤amiento Evento', 'Acompañamiento Evento', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'AcompaÂ¤amiento Evento', 'Acompañamiento Evento', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Ca¡da de Altura', 'Caída de Altura', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'CaÂ¡da de Altura', 'Caída de Altura', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Convulsi¢n', 'Convulsión', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'ConvulsiÂ¢n', 'Convulsión', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Dolor Tor cico', 'Dolor Torácico', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Dolor TorÂ cico', 'Dolor Torácico', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Electrocuci¢n / rescate', 'Electrocución / rescate', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'ElectrocuciÂ¢n / rescate', 'Electrocución / rescate', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Intoxicaci¢n', 'Intoxicación', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'IntoxicaciÂ¢n', 'Intoxicación', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Patolog¡a Ginecobst‚trica ', 'Patología Ginecobstétrica', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'PatologÂ¡a Ginecobstâ€štrica ', 'Patología Ginecobstétrica', fullData['TIPO_INCIDENTE'])
+    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'S¡ntomas Gastrointestinales', 'Síntomas Gastrointestinales', fullData['TIPO_INCIDENTE'])
+
+    
+    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'Antonio Nari¤o', 'Antonio Nariño', 
+np.where(fullData['LOCALIDAD'] == 'Antonio NariÂ¤o', 'Antonio Nariño', 
+np.where(fullData['LOCALIDAD'] == 'Ciudad Bol¡var', 'Ciudad Bolívar', 
+np.where(fullData['LOCALIDAD'] == 'Ciudad BolÂ¡var', 'Ciudad Bolívar', 
+np.where(fullData['LOCALIDAD'] == 'Engativ ', 'Engativá', 
+np.where(fullData['LOCALIDAD'] == 'EngativÂ ', 'Engativá', 
+np.where(fullData['LOCALIDAD'] == 'Fontib¢n', 'Fontibón', 
+np.where(fullData['LOCALIDAD'] == 'FontibÂ¢n', 'Fontibón',
+np.where(fullData['LOCALIDAD'] == 'Los M rtires', 'Los Mártires', 
+np.where(fullData['LOCALIDAD'] == 'Los MÂ rtires', 'Los Mártires', 
+np.where(fullData['LOCALIDAD'] == 'San Crist¢bal', 'San Cristóbal', 
+np.where(fullData['LOCALIDAD'] == 'San CristÂ¢bal', 'San Cristóbal', 
+np.where(fullData['LOCALIDAD'] == 'Usaqu‚n', 'Usaquén', 
+np.where(fullData['LOCALIDAD'] == 'Usaquâ€šn', 'Usaquén', 
+np.where(fullData['LOCALIDAD'] == 'Usaquân', 'Usaquén', fullData['LOCALIDAD'])))))))))))))))
+
+
+    fullData['UNIDAD'] = fullData['UNIDAD'].map({'AÑOS':'AÑOS', 
+                                     'SIN_DATO': 'SIN_DATO', 
+                                     'Años':'AÑOS', 
+                                     'Sin_dato': 'SIN_DATO',
+                                     'Meses':'MESES', 
+                                     'Dias': 'DIAS', 
+                                     'Horas': 'HORAS', 
+                                     'horas': 'HORAS'
+                                     })
+    fullData['GENERO'] = fullData['GENERO'].map({'SIN_DATO':'SIN_DATO', 
+                                     'Sin_dato': 'SIN_DATO', 
+                                     'Masculino':'MASCULINO', 
+                                     'Femenino': 'FEMENINO',
+                                     'MASCULINO':'MASCULINO', 
+                                     'FEMENINO': 'FEMENINO'
+                                     })
+    fullData['EDAD'] = np.where(fullData['EDAD'] == 'SIN_DATO', '0', fullData['EDAD'])
+    fullData['EDAD'] = pd.to_numeric(fullData['EDAD'] , errors='coerce')
+    #fullData['EDAD'] = np.where(fullData['EDAD'] == 0, round(fullData['EDAD'].mean(),2), fullData['EDAD'])
+    return fullData
+    
+def showAllDataFromDataset(df, entries):
+  for i in df[entries].columns:
+    print(f' 🚀 | {i} - types: {df[i].nunique()}')
+    print((df[i].value_counts()))
+    print('-------------------------------')
 
 
 def main ():
@@ -130,7 +187,7 @@ def main ():
     dataframes = []
     for filename in filenames[1:]:
         datos = get_data(filename)
-        showAmountNAPerColumn(datos)
+        #showAmountNAPerColumn(datos)
         datos = normalizeNamesColumns(datos)
         datos = drop_duplicate(datos)
         datos = change_nulls(datos)
@@ -140,41 +197,12 @@ def main ():
     fullData = pd.concat(dataframes)
     print(f'Tamaño del fullData:{len(fullData)}')
     fullData = fullData.reset_index(drop=True)
-    fullData= change_nulls(fullData)
-    fullData['UNIDAD'] = np.where(fullData['UNIDAD'] == 'A¤os', 'AÑOS', fullData['UNIDAD'])
-    fullData['UNIDAD'] = np.where(fullData['UNIDAD'] == 'AÂ¤os', 'AÑOS', fullData['UNIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'Antonio Nari¤o', 'Antonio Nariño', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'Antonio NariÂ¤o', 'Antonio Nariño', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'Ciudad Bol¡var', 'Ciudad Bolívar', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'Ciudad BolÂ¡var', 'Ciudad Bolívar', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'Engativ ', 'Engativá', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'EngativÂ ', 'Engativá', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'Fontib¢n', 'Fontibón', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'FontibÂ¢n', 'Fontibón', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'Los M rtires', 'Los Mártires', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'Los MÂ rtires', 'Los Mártires', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'San Crist¢bal', 'San Cristóbal', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'San CristÂ¢bal', 'San Cristóbal', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'Usaqu‚n ', 'Usaquén', fullData['LOCALIDAD'])
-    fullData['LOCALIDAD'] = np.where(fullData['LOCALIDAD'] == 'Usaquâ€šn ', 'Usaquén', fullData['LOCALIDAD'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Accidente de Aviaci¢n', 'Accidente de Aviación',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Acompa¤amiento Evento', 'Acompañamiento Evento',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'AcompaÂ¤amiento Evento', 'Acompañamiento Evento',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Ca¡da de Altura', 'Caída de Altura',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'CaÂ¡da de Altura', 'Caída de Altura',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Convulsi¢n', 'Convulsión',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'ConvulsiÂ¢n', 'Convulsión',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Dolor Tor cico', 'Dolor Torácico',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Dolor TorÂ cico', 'Dolor Torácico',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Electrocuci¢n / rescate', 'Electrocución / rescate',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'ElectrocuciÂ¢n / rescate', 'Electrocución / rescate',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Intoxicaci¢n', 'Intoxicación',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'IntoxicaciÂ¢n', 'Intoxicación',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'Patolog¡a Ginecobst‚trica ', 'Patología Ginecobstétrica',        fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'PatologÂ¡a Ginecobstâ€štrica ', 'Patología Ginecobstétrica', fullData['TIPO_INCIDENTE'])
-    fullData['TIPO_INCIDENTE'] = np.where(fullData['TIPO_INCIDENTE'] == 'S¡ntomas Gastrointestinales', 'Síntomas Gastrointestinales',        fullData['TIPO_INCIDENTE'])
-    fullData['PRIORIDAD'] = np.where(fullData['PRIORIDAD'] == 'CRITCA', 'CRITICA', fullData['PRIORIDAD'])
-
+    fullData = change_nulls(fullData)
+    print('😁 Antes ----------------')
+    showAllDataFromDataset(fullData, ['LOCALIDAD', 'GENERO', 'UNIDAD','EDAD'])
+    fullData = cleanData(fullData)
+    print('😁 Ahora ----------------')
+    showAllDataFromDataset(fullData, ['LOCALIDAD', 'GENERO', 'UNIDAD','EDAD'])
     generate_file(fullData, "datos_consolidados_v5.csv")
    
 
