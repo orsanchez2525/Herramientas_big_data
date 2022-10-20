@@ -2,8 +2,10 @@
 # importar librerias internas del sistema
 import os
 import pandas as pd
+import numpy  as np
 from pathlib import Path
-  
+from google.cloud import storage
+
 
 def get_data(filename):
     """Metodo que importa un archivo .csv y lo guarda en un dataframe
@@ -14,17 +16,24 @@ def get_data(filename):
     Returns:
         dataframe: El dataframe donde se cargo el archivo
     """
-   # data_dir="raw"
-    #root_dir=Path('.').resolve().parent
-    #file_path=os.path.join(root_dir,"data",data_dir,filename)
     datos=pd.read_csv(f"gs://orsanchez_llamadas_123/data/raw/{filename}",sep=";",encoding="latin-1")
-    print('get_date')
+    print("------------------")
+    print(f"Filename: {filename}")
     print(datos.shape[0],datos.shape[1])
-    #print(filename, type(filename))
+    print(datos.columns)
+    print("------------------")
     return datos
 
 
 def normalizeNamesColumns(df):
+    """Metodo que unifica los nombres de las columnas de los dataframe
+
+    Args:
+        datos (dataframe): El dataframe en donde se cargo cada uno de los archivos
+
+    Returns:
+        df: El dataframe donde se cargo el archivo con las columnas unificadas
+    """
     if df.shape[1] == 10:
         df.columns = ['NUMERO_INCIDENTE', 'FECHA_INICIO_DESPLAZAMIENTO_MOVIL', 'CODIGO_LOCALIDAD', 'LOCALIDAD',	'EDAD',	'UNIDAD', 'GENERO',	'RED','TIPO_INCIDENTE',	'PRIORIDAD']
     else: 
@@ -105,13 +114,21 @@ def generate_file(df,file_name):
         file_name (string): nombre del archivo que se cargo inicialmente
     """
     out_name='reporte_limpieza_' + file_name
-    df.to_csv(f'gs://orsanchez_llamadas_123/data/processed/{out_name}')
+    df.to_csv(f'gs://orsanchez_llamadas_123/data/processed/{out_name}',encoding="latin-1",index = False)
 
 
 def main ():
-    filenames = ["20.llamadas123_agosto_2022.csv","1.llamadas_123_enero_2021.csv"]
+    storage_client = storage.Client()
+    bucket_name = 'orsanchez_llamadas_123'
+    blobs = storage_client.list_blobs(bucket_name)
+
+    filenames = []
+    for blob in blobs:
+        if 'raw' in blob.name:
+            filenames.append(blob.name[9:])
+    
     dataframes = []
-    for filename in filenames:
+    for filename in filenames[1:]:
         datos = get_data(filename)
         showAmountNAPerColumn(datos)
         datos = normalizeNamesColumns(datos)
@@ -121,8 +138,12 @@ def main ():
         dataframes.append(datos)
     print('dataframes', dataframes)
     fullData = pd.concat(dataframes)
-    print('Tamaño:', len(dataframes))
-    generate_file(fullData, "v4_datos_consolidados.csv")
+    print(f'Tamaño del fullData:{len(fullData)}')
+    fullData = fullData.reset_index(drop=True)
+    fullData= change_nulls(fullData)
+    #fullData['UNIDAD'] = np.where(fullData['UNIDAD'] == 'A¤os', 'AÑOS', fullData['UNIDAD'])
+    generate_file(fullData, "datos_consolidados_v3.csv")
+   
 
 if __name__=='__main__':
     main()
