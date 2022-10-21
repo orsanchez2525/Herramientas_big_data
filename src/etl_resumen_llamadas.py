@@ -7,6 +7,7 @@ from pathlib import Path
 from google.cloud import storage
 
 
+
 def get_data(filename):
     """Metodo que importa un archivo .csv y lo guarda en un dataframe
 
@@ -37,7 +38,7 @@ def normalizeNamesColumns(df):
     if df.shape[1] == 10:
         df.columns = ['NUMERO_INCIDENTE', 'FECHA_INICIO_DESPLAZAMIENTO_MOVIL', 'CODIGO_LOCALIDAD', 'LOCALIDAD',	'EDAD',	'UNIDAD', 'GENERO',	'RED','TIPO_INCIDENTE',	'PRIORIDAD']
     else: 
-        df.columns = ['NUMERO_INCIDENTE', 'FECHA_INICIO_DESPLAZAMIENTO_MOVIL', 'CODIGO_LOCALIDAD', 'LOCALIDAD',	'EDAD',	'UNIDAD', 'GENERO',	'RED','TIPO_INCIDENTE',	'PRIORIDAD', 'RECEPCIÓN']
+        df.columns = ['NUMERO_INCIDENTE', 'FECHA_INICIO_DESPLAZAMIENTO_MOVIL', 'CODIGO_LOCALIDAD', 'LOCALIDAD',	'EDAD',	'UNIDAD', 'GENERO',	'RED','TIPO_INCIDENTE',	'PRIORIDAD', 'RECEPCION']
     return df
 
 
@@ -106,6 +107,9 @@ def generate_file(df,file_name):
     """
     out_name='reporte_limpieza_' + file_name
     df.to_csv(f'gs://orsanchez_llamadas_123/data/processed/{out_name}', index = False)
+    
+    table_name='Llamadas_123_Oscar_Sanchez.Llamadas_123'
+    df.to_gbq(table_name,if_exists='replace')
 
 def cleanData(fullData):
     fullData['UNIDAD'] = np.where(fullData['UNIDAD'] == 'A¤os', 'AÑOS', fullData['UNIDAD'])
