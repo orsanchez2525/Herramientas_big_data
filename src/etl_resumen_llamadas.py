@@ -18,11 +18,6 @@ def get_data(filename):
         dataframe: El dataframe donde se cargo el archivo
     """
     datos=pd.read_csv(f"gs://orsanchez_llamadas_123/data/raw/{filename}",sep=";",encoding="latin-1")
-    print("------------------")
-    print(f"Filename: {filename}")
-    print(datos.shape[0],datos.shape[1])
-    print(datos.columns)
-    print("------------------")
     return datos
 
 
@@ -56,7 +51,6 @@ def drop_duplicate(datos):
     df=datos.drop_duplicates()
     df.reset_index(inplace=True)#Sobreescribe en el espacio de memoria
     df.drop(columns='index',inplace=True)
-    print('forma sin duplicados',df.shape)
     return df
 
 
@@ -170,13 +164,7 @@ np.where(fullData['LOCALIDAD'] == 'Usaquân', 'Usaquén', fullData['LOCALIDAD'])
     fullData['EDAD'] = pd.to_numeric(fullData['EDAD'] , errors='coerce')
     #fullData['EDAD'] = np.where(fullData['EDAD'] == 0, round(fullData['EDAD'].mean(),2), fullData['EDAD'])
     return fullData
-    
-def showAllDataFromDataset(df, entries):
-  for i in df[entries].columns:
-    print(f' 🚀 | {i} - types: {df[i].nunique()}')
-    print((df[i].value_counts()))
-    print('-------------------------------')
-
+        
 
 def main ():
     storage_client = storage.Client()
@@ -197,16 +185,12 @@ def main ():
         datos = change_nulls(datos)
         datos = change_type(datos)
         dataframes.append(datos)
-    print('dataframes', dataframes)
+   # print('dataframes', dataframes)
     fullData = pd.concat(dataframes)
-    print(f'Tamaño del fullData:{len(fullData)}')
+    #print(f'Tamaño del fullData:{len(fullData)}')
     fullData = fullData.reset_index(drop=True)
     fullData = change_nulls(fullData)
-    print('😁 Antes ----------------')
-    showAllDataFromDataset(fullData, ['LOCALIDAD', 'GENERO', 'UNIDAD','EDAD'])
     fullData = cleanData(fullData)
-    print('😁 Ahora ----------------')
-    showAllDataFromDataset(fullData, ['LOCALIDAD', 'GENERO', 'UNIDAD','EDAD'])
     generate_file(fullData, "datos_consolidados_v5.csv")
    
 
